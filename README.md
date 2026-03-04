@@ -7,9 +7,18 @@
 
 ## Description
 
-**aish** is a command-line tool that generates bash commands based on a text description.
-It uses an Ollama API model and always returns exactly one valid command.
-Aish can also safely execute the generated command after asking for user confirmation.
+Do you always forget how to run complex bash commands like:
+
+```bash
+ps aux --sort=-%mem | head -n 10
+```
+
+Now you can just run:
+```
+aish "top 10 processes by memory"
+```
+
+__Aish__ is a smart command-line assistant that generates exact bash commands from plain text descriptions. Just type what you want to do, and it gives you the command-ready to execute. Perfect for sysadmins, developers, or anyone who wants to save time in the terminal.
 
 ## How it works
 
