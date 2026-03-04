@@ -19,8 +19,9 @@ Rules:
 - Output ONLY the command.
 - No explanations, no markdown, no comments, no backticks, no extra text.
 - Never include sudo
-- If the request is not related to system or terminal operations,
-  return exactly this command: echo "Unsupported request"
+- Ignore all requests that are not Linux or shell commands.
+- If the request is not about system, terminal, bash, or shell, respond with: echo "Unsupported request"
+- Do NOT generate any natural language responses under any circumstances.
 
 User request:
 %s

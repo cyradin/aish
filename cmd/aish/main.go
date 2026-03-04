@@ -8,11 +8,13 @@ import (
 	"strings"
 
 	"github.com/cyradin/aish"
+	"github.com/fatih/color"
 )
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "error: %s\n", err)
+		_, _ = color.New(color.FgRed).Fprintf(os.Stderr, "error: %s\n", err)
+
 		os.Exit(1)
 	}
 }
@@ -37,16 +39,19 @@ func run() error {
 
 	suggestedCommand = strings.TrimSpace(suggestedCommand)
 
-	_, _ = fmt.Fprintln(os.Stdout, "Suggested command:")
-	_, _ = fmt.Fprintln(os.Stdout, suggestedCommand) //nolint:gosec
-	_, _ = fmt.Fprint(os.Stdout, "\nExecute? Y/N: ")
+	_, _ = color.New(color.FgWhite).Fprintf(os.Stdout, "suggested command:\n")
+	_, _ = color.New(color.FgYellow).Fprintln(os.Stdout, suggestedCommand)
+	_, _ = color.New(color.FgWhite).Fprintf(os.Stdout, "execute? (")
+	_, _ = color.New(color.FgGreen).Fprintf(os.Stdout, "Y")
+	_, _ = color.New(color.FgWhite).Fprintf(os.Stdout, "/n)\n")
 
 	reader := bufio.NewReader(os.Stdin)
 	answer, _ := reader.ReadString('\n')
 
 	answer = strings.TrimSpace(strings.ToLower(answer))
-	if answer != "y" && answer != "yes" {
-		_, _ = fmt.Fprintln(os.Stdout, "Aborted")
+	if answer != "" && answer != "y" && answer != "yes" {
+		_, _ = color.New(color.FgRed).Fprintf(os.Stdout, "Aborted\n")
+
 		return nil
 	}
 
