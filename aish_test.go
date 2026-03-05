@@ -28,15 +28,6 @@ func TestAish_Query(t *testing.T) {
 			wantError: false,
 		},
 		{
-			name: "unsupported request",
-			client: &mockClient{
-				resp: unsupportedRequest,
-			},
-			text:      "tell me a joke",
-			want:      "",
-			wantError: true,
-		},
-		{
 			name: "client error",
 			client: &mockClient{
 				err: errors.New("network error"),

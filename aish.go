@@ -11,8 +11,6 @@ type client interface {
 	Generate(model string, prompt string) (string, error)
 }
 
-const unsupportedRequest = `echo "Unsupported request"`
-
 type Aish struct {
 	model       string
 	client      client
@@ -31,10 +29,6 @@ func (a *Aish) Query(text string) (string, error) {
 	resp, err := a.client.Generate(a.model, text)
 	if err != nil {
 		return "", fmt.Errorf("generate response: %w", err)
-	}
-
-	if strings.Contains(resp, unsupportedRequest) {
-		return "", fmt.Errorf("unsupported request")
 	}
 
 	resp = replacer.Replace(resp)
