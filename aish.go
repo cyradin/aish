@@ -11,22 +11,6 @@ type client interface {
 	Generate(model string, prompt string) (string, error)
 }
 
-const basePrompt = `
-You are a strict Linux bash command generator.
-
-Rules:
-- You MUST return exactly ONE valid bash command.
-- Output ONLY the command.
-- No explanations, no markdown, no comments, no backticks, no extra text.
-- Never include sudo
-- Ignore all requests that are not Linux or shell commands.
-- If the request is not about system, terminal, bash, or shell, respond with: echo "Unsupported request"
-- Do NOT generate any natural language responses under any circumstances.
-
-User request:
-%s
-`
-
 const unsupportedRequest = `echo "Unsupported request"`
 
 type Aish struct {
@@ -44,7 +28,7 @@ func New(model string, client client) *Aish {
 }
 
 func (a *Aish) Query(text string) (string, error) {
-	resp, err := a.client.Generate(a.model, fmt.Sprintf(basePrompt, text))
+	resp, err := a.client.Generate(a.model, text)
 	if err != nil {
 		return "", fmt.Errorf("generate response: %w", err)
 	}
@@ -52,6 +36,8 @@ func (a *Aish) Query(text string) (string, error) {
 	if strings.Contains(resp, unsupportedRequest) {
 		return "", fmt.Errorf("unsupported request")
 	}
+
+	resp = replacer.Replace(resp)
 
 	return resp, nil
 }
@@ -68,3 +54,10 @@ func (a *Aish) Execute(cmd string) error {
 
 	return nil
 }
+
+var replacer = strings.NewReplacer(
+	"```bash", "",
+	"```shell", "",
+	"```sh", "",
+	"```", "",
+)
